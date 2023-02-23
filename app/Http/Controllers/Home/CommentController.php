@@ -57,7 +57,6 @@ class CommentController extends Controller {
           $find_comment = Comment::where('id' , $id);
 
           if($find_comment) {
-             $delete=  $find_comment->delete();
 
              if($find_comment->first()->media != null && $find_comment->first()->media != '') {
                  $storage = Storage::disk('comment_image');
@@ -66,6 +65,9 @@ class CommentController extends Controller {
                     $storage->delete($find_comment->first()->media);
                 }
              }
+
+             $delete=  $find_comment->delete();
+
 
              if($delete) {
                 return response()->json(['message' => 'delete success']);

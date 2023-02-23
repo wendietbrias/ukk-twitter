@@ -64,7 +64,7 @@ class ProfileController extends Controller {
     }
 
     public function userTweet() {
-        $user_tweets = Tweets::with(['user' , 'comments'])->where('user_id'  , Auth::user()->id)->get();
+        $user_tweets = Tweets::with(['user' , 'comments', 'likes'])->where('user_id'  , Auth::user()->id)->get();
  
         //cek apakah tweet user ada atau tidak
         if($user_tweets){
@@ -79,7 +79,7 @@ class ProfileController extends Controller {
         if($id) {
             
            //menghapus gambar yang di store di folder storage
-            if($storage->exists($find_tweet->first()->media)){
+            if($find_tweet->first()->media != null && $storage->exists($find_tweet->first()->media)){
                $storage->delete($find_tweet->first()->media);
             }
 
@@ -124,7 +124,7 @@ class ProfileController extends Controller {
         
              $find_tweet->tweet = $split_tweet[0];
              $find_tweet->tag = implode("" ,$slices_tweet);
-             $find_tweet->media = $format_image == null ? $ind_tweet->media : $format_image;
+             $find_tweet->media = $format_image == null ? $find_tweet->media : $format_image;
 
              //menyimpan data tweet
              $saved = $find_tweet->save();
